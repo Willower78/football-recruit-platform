@@ -1,0 +1,23 @@
+CREATE TABLE player_profiles (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    full_name text,
+    date_of_birth date,
+    nationality text,
+    city text,
+    country text,
+    geo_point geography(Point, 4326),
+    dominant_foot text CHECK (dominant_foot IN ('left','right','both')),
+    primary_position text,
+    secondary_positions jsonb DEFAULT '[]',
+    height_cm integer,
+    weight_kg integer,
+    current_club text,
+    free_agent boolean DEFAULT true,
+    availability_status text DEFAULT 'available',
+    bio text,
+    visibility_level text DEFAULT 'public' CHECK (visibility_level IN ('public','clubs_only','private')),
+    guardian_required boolean DEFAULT false,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now()
+);

@@ -1,0 +1,13 @@
+CREATE INDEX idx_player_position ON player_profiles(primary_position);
+CREATE INDEX idx_player_geo ON player_profiles USING gist(geo_point);
+CREATE INDEX idx_club_geo ON club_profiles USING gist(geo_point);
+CREATE INDEX idx_need_status_position ON club_needs(status, position);
+CREATE INDEX idx_application_status ON applications(status);
+CREATE INDEX idx_tracking_report_ts ON player_tracking_frames(report_id, frame_ts_ms);
+CREATE INDEX idx_events_report_ts ON tracked_events(report_id, timestamp_sec);
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_role ON users(role);
+CREATE INDEX idx_psych_questions_domain ON psych_questions(domain, active);
+CREATE INDEX idx_psych_responses_assessment ON psych_responses(assessment_id);
+CREATE INDEX idx_recommendations_player ON recommendations(player_id);
+CREATE INDEX idx_verification_status ON verification_requests(status);

@@ -1,0 +1,22 @@
+CREATE TABLE recommendations (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    request_id uuid REFERENCES recommendation_requests(id),
+    player_id uuid REFERENCES player_profiles(id) ON DELETE CASCADE,
+    coach_name text,
+    coach_role text,
+    coach_club text,
+    coach_email text,
+    relationship_duration text,
+    overall_rating integer CHECK (overall_rating BETWEEN 1 AND 5),
+    strengths_text text,
+    development_text text,
+    domain_ratings jsonb,
+    would_recommend boolean,
+    additional_notes text,
+    verified boolean DEFAULT false,
+    verification_status text DEFAULT 'unverified' CHECK (verification_status IN ('unverified','pending','verified')),
+    verified_at timestamptz,
+    verified_by uuid REFERENCES users(id),
+    visibility text DEFAULT 'public' CHECK (visibility IN ('public','clubs_only','private')),
+    created_at timestamptz DEFAULT now()
+);
