@@ -13,8 +13,8 @@ import { PlayerProfilesService } from './player-profiles.service';
 import { UpdatePlayerProfileDto } from './dto/update-player-profile.dto';
 import { SearchPlayersDto } from './dto/search-players.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
 import { CurrentUser, JwtUser } from '../auth/decorators/current-user.decorator';
-import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('players')
 @Controller('players')
@@ -35,13 +35,13 @@ export class PlayerProfilesController {
     return this.service.updateForUser(user.sub, dto);
   }
 
-  @Public()
+  @UseGuards(OptionalJwtAuthGuard)
   @Get()
   search(@Query() dto: SearchPlayersDto) {
     return this.service.search(dto);
   }
 
-  @Public()
+  @UseGuards(OptionalJwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string, @CurrentUser() user?: JwtUser) {
     return this.service.findById(id, user?.role);

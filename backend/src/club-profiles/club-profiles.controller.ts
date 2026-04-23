@@ -5,8 +5,8 @@ import { ClubProfilesService } from './club-profiles.service';
 import { UpdateClubProfileDto } from './dto/update-club-profile.dto';
 import { SearchClubsDto } from './dto/search-clubs.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
 import { CurrentUser, JwtUser } from '../auth/decorators/current-user.decorator';
-import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('clubs')
 @Controller('clubs')
@@ -27,13 +27,13 @@ export class ClubProfilesController {
     return this.service.updateForUser(user.sub, dto);
   }
 
-  @Public()
+  @UseGuards(OptionalJwtAuthGuard)
   @Get()
   search(@Query() dto: SearchClubsDto) {
     return this.service.search(dto);
   }
 
-  @Public()
+  @UseGuards(OptionalJwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.service.findById(id);
