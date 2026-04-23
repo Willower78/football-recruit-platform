@@ -103,7 +103,10 @@ export class PlayerProfilesService {
     return profile;
   }
 
-  async search(query: SearchPlayersDto): Promise<{
+  async search(
+    query: SearchPlayersDto,
+    requester: JwtUser | null,
+  ): Promise<{
     data: PlayerProfile[];
     page: number;
     limit: number;
@@ -116,10 +119,16 @@ export class PlayerProfilesService {
       | 'ASC'
       | 'DESC';
 
+    const canSeeClubsOnly =
+      requester?.role === 'club' || requester?.role === 'admin';
+    const visibilities = canSeeClubsOnly
+      ? ['public', 'clubs_only']
+      : ['public'];
+
     const qb = this.repo
       .createQueryBuilder('p')
       .where('p.visibility_level IN (:...visibilities)', {
-        visibilities: ['public', 'clubs_only'],
+        visibilities,
       });
 
     if (query.position) {

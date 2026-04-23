@@ -46,20 +46,24 @@ export class PlayerProfilesController {
 
   @Public()
   @Get()
-  search(@Query() query: SearchPlayersDto): Promise<{
+  search(
+    @Query() query: SearchPlayersDto,
+    @CurrentUser() user: JwtUser | null,
+  ): Promise<{
     data: PlayerProfile[];
     page: number;
     limit: number;
     total: number;
   }> {
-    return this.service.search(query);
+    return this.service.search(query, user ?? null);
   }
 
+  @Public()
   @Get(':id')
   @ApiBearerAuth()
   getById(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @CurrentUser() user: JwtUser,
+    @CurrentUser() user: JwtUser | null,
   ): Promise<PlayerProfile> {
     return this.service.findById(id, user ?? null);
   }

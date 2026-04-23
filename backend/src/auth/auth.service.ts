@@ -72,13 +72,13 @@ export class AuthService {
       {
         userId: user.id,
         consentType: 'terms',
-        granted: dto.accept_terms !== false,
+        granted: dto.accept_terms === true,
         grantedAt: now,
       },
       {
         userId: user.id,
         consentType: 'privacy',
-        granted: dto.accept_privacy !== false,
+        granted: dto.accept_privacy === true,
         grantedAt: now,
       },
     ]);
@@ -114,6 +114,9 @@ export class AuthService {
     const user = await this.users.findById(payload.sub);
     if (!user) {
       throw new UnauthorizedException('User no longer exists');
+    }
+    if (user.status === 'suspended') {
+      throw new UnauthorizedException('Account suspended');
     }
     return this.buildAuthResponse(user);
   }
