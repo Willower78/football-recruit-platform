@@ -7,9 +7,11 @@ import { VideoIntegration } from '../entities/video-integration.entity';
 import { VeoService } from './providers/veo.service';
 import type { NormalizedMatch } from './providers/video-provider.interface';
 
+const STATE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+
 @Injectable()
 export class VideoIntegrationsService {
-  private stateMap = new Map<string, string>();
+  private stateMap = new Map<string, { userId: string; createdAt: number }>();
 
   constructor(
     @InjectRepository(VideoIntegration)
@@ -19,12 +21,22 @@ export class VideoIntegrationsService {
 
   getVeoAuthUrl(userId: string): string {
     const state = randomUUID();
-    this.stateMap.set(state, userId);
+    this.stateMap.set(state, { userId, createdAt: Date.now() });
+    this.pruneExpiredStates();
     return this.veo.getAuthUrl(state);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async handleVeoCallback(userId: string, code: string, _state: string): Promise<VideoIntegration> {
+  async handleVeoCallback(userId: string, code: string, state: string): Promise<VideoIntegration> {
+    const entry = this.stateMap.get(state);
+    if (!entry || entry.userId !== userId) {
+      throw new ForbiddenException('Invalid or expired OAuth state');
+    }
+    this.stateMap.delete(state);
+
+    if (Date.now() - entry.createdAt > STATE_TTL_MS) {
+      throw new ForbiddenException('OAuth state expired');
+    }
+
     const tokens = await this.veo.exchangeCode(code);
 
     const existing = await this.repo.findOne({
@@ -104,5 +116,14 @@ export class VideoIntegrationsService {
 
   async getVeoDownloadUrl(integration: VideoIntegration, matchId: string): Promise<string> {
     return this.veo.getDownloadUrl(integration, matchId);
+  }
+
+  private pruneExpiredStates(): void {
+    const now = Date.now();
+    for (const [key, entry] of this.stateMap) {
+      if (now - entry.createdAt > STATE_TTL_MS) {
+        this.stateMap.delete(key);
+      }
+    }
   }
 }
