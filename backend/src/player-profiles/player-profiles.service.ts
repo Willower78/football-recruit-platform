@@ -27,7 +27,10 @@ export class PlayerProfilesService {
     if (profile.visibilityLevel === 'private' && viewerRole !== 'admin') {
       throw new ForbiddenException('This profile is private');
     }
-    if (profile.visibilityLevel === 'clubs_only' && !['club', 'scout', 'admin'].includes(viewerRole ?? '')) {
+    if (
+      profile.visibilityLevel === 'clubs_only' &&
+      !['club', 'scout', 'admin'].includes(viewerRole ?? '')
+    ) {
       throw new ForbiddenException('This profile is only visible to clubs');
     }
     return profile;
@@ -39,10 +42,7 @@ export class PlayerProfilesService {
 
     // Apply scalar fields only. Geography is written separately via raw SQL so
     // PostGIS can build the `geography(Point)` value correctly.
-    await this.repo.update(
-      { userId },
-      rest as unknown as QueryDeepPartialEntity<PlayerProfile>,
-    );
+    await this.repo.update({ userId }, rest as unknown as QueryDeepPartialEntity<PlayerProfile>);
 
     if (latitude !== undefined && longitude !== undefined) {
       await this.repo.query(
@@ -59,7 +59,9 @@ export class PlayerProfilesService {
   }
 
   async search(dto: SearchPlayersDto) {
-    const qb = this.repo.createQueryBuilder('p').where('p.visibility_level != :priv', { priv: 'private' });
+    const qb = this.repo
+      .createQueryBuilder('p')
+      .where('p.visibility_level != :priv', { priv: 'private' });
 
     if (dto.position) {
       qb.andWhere('p.primary_position = :pos', { pos: dto.position });

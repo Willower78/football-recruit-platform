@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
+import { VerificationBadge } from '@/components/verification-badge';
 import { api } from '@/lib/api';
 
 type Mode = 'players' | 'clubs';
@@ -30,6 +31,7 @@ interface ClubItem {
   country: string | null;
   competitionLevel: string | null;
   verified: boolean;
+  verificationTier?: string;
 }
 
 export default function SearchPage() {
@@ -165,7 +167,7 @@ function ClubCard({ club }: { club: ClubItem }) {
         <CardContent className="space-y-2 p-4">
           <div className="flex items-center gap-2">
             <p className="font-semibold">{club.clubName ?? 'Club'}</p>
-            {club.verified && <Badge variant="success">Verified</Badge>}
+            <VerificationBadge tier={(club.verificationTier as 'unverified' | 'verified' | 'official') ?? 'unverified'} />
           </div>
           <p className="text-sm text-muted-foreground">
             {[club.city, club.country].filter(Boolean).join(', ')}
