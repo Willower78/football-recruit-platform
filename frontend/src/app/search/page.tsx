@@ -36,7 +36,13 @@ export default function SearchPage() {
   const [mode, setMode] = useState<Mode>('players');
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<(PlayerItem | ClubItem)[]>([]);
-  const [filters, setFilters] = useState({ q: '', position: '', country: '' });
+  const [filters, setFilters] = useState({
+    q: '',
+    position: '',
+    country: '',
+    hasVideoAnalysis: '',
+    hasHighlights: '',
+  });
 
   async function run(e?: FormEvent<HTMLFormElement>) {
     e?.preventDefault();
@@ -45,6 +51,8 @@ export default function SearchPage() {
       const params = new URLSearchParams();
       if (filters.country) params.set('country', filters.country);
       if (mode === 'players' && filters.position) params.set('position', filters.position);
+      if (mode === 'players' && filters.hasVideoAnalysis) params.set('hasVideoAnalysis', filters.hasVideoAnalysis);
+      if (mode === 'players' && filters.hasHighlights) params.set('hasHighlights', filters.hasHighlights);
 
       const path = mode === 'players' ? `/players?${params}` : `/clubs?${params}`;
       const res = await api<{ items: (PlayerItem | ClubItem)[] }>(path, { skipAuth: true });
@@ -82,18 +90,44 @@ export default function SearchPage() {
 
               <form onSubmit={run} className="space-y-3">
                 {mode === 'players' && (
-                  <div className="space-y-2">
-                    <Label>Position</Label>
-                    <Select
-                      value={filters.position}
-                      onChange={(e) => setFilters((f) => ({ ...f, position: e.target.value }))}
-                    >
-                      <option value="">Any</option>
-                      {['GK', 'CB', 'LB', 'RB', 'DM', 'CM', 'AM', 'LW', 'RW', 'ST'].map((p) => (
-                        <option key={p} value={p}>{p}</option>
-                      ))}
-                    </Select>
-                  </div>
+                  <>
+                    <div className="space-y-2">
+                      <Label>Position</Label>
+                      <Select
+                        value={filters.position}
+                        onChange={(e) => setFilters((f) => ({ ...f, position: e.target.value }))}
+                      >
+                        <option value="">Any</option>
+                        {['GK', 'CB', 'LB', 'RB', 'DM', 'CM', 'AM', 'LW', 'RW', 'ST'].map((p) => (
+                          <option key={p} value={p}>{p}</option>
+                        ))}
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Has video analysis</Label>
+                      <Select
+                        value={filters.hasVideoAnalysis}
+                        onChange={(e) => setFilters((f) => ({ ...f, hasVideoAnalysis: e.target.value }))}
+                      >
+                        <option value="">Any</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Has highlights</Label>
+                      <Select
+                        value={filters.hasHighlights}
+                        onChange={(e) => setFilters((f) => ({ ...f, hasHighlights: e.target.value }))}
+                      >
+                        <option value="">Any</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                      </Select>
+                    </div>
+                  </>
                 )}
 
                 <div className="space-y-2">
@@ -147,7 +181,17 @@ function PlayerCard({ player }: { player: PlayerItem }) {
     <Link href={`/players/${player.id}`}>
       <Card className="transition-colors hover:border-primary">
         <CardContent className="space-y-2 p-4">
-          <p className="font-semibold">{player.fullName ?? 'Player'}</p>
+          <div className="flex items-center gap-2">
+            <p className="font-semibold">{player.fullName ?? 'Player'}</p>
+            <Link
+              href={`/players/${player.id}?tab=videos`}
+              className="text-primary"
+              title="View highlights"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </Link>
+          </div>
           <p className="text-sm text-muted-foreground">
             {player.primaryPosition ?? '—'} · {[player.city, player.country].filter(Boolean).join(', ')}
           </p>
