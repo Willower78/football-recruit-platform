@@ -36,7 +36,7 @@ export class UpdatePlayerProfileDto {
   secondaryPositions?: string[];
 
   @ApiProperty({ required: false }) @IsOptional() @IsInt() @Min(100) @Max(250) heightCm?: number;
-  @ApiProperty({ required: false }) @IsOptional() @IsInt() @Min(30)  @Max(200) weightKg?: number;
+  @ApiProperty({ required: false }) @IsOptional() @IsInt() @Min(30) @Max(200) weightKg?: number;
 
   @ApiProperty({ required: false }) @IsOptional() @IsString() currentClub?: string;
   @ApiProperty({ required: false }) @IsOptional() @IsBoolean() freeAgent?: boolean;

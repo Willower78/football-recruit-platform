@@ -18,11 +18,28 @@ interface ClubProfile {
   verificationTier: string;
 }
 
+interface ClubNeed {
+  id: string;
+  position: string;
+  ageMax: number | null;
+  footPreference: string | null;
+  heightMin: number | null;
+  status: string;
+}
+
+interface SavedSearchItem {
+  id: string;
+  name: string;
+  filters: Record<string, string>;
+}
+
 export default function ClubDashboard() {
   const [profile, setProfile] = useState<ClubProfile | null>(null);
+  const [savedSearches, setSavedSearches] = useState<SavedSearchItem[]>([]);
 
   useEffect(() => {
     api<ClubProfile>('/clubs/me').then(setProfile).catch(() => setProfile(null));
+    api<SavedSearchItem[]>('/saved-searches').then(setSavedSearches).catch(() => {});
   }, []);
 
   return (
@@ -51,8 +68,40 @@ export default function ClubDashboard() {
           <CardContent className="flex flex-wrap gap-3">
             <Button asChild variant="outline"><Link href="/search">Discover players</Link></Button>
             <Button asChild variant="outline"><Link href="/onboarding/club">Update profile</Link></Button>
+            <Button asChild variant="outline">
+              <Link href="/search?hasScoutingReport=true">Find Scouted Players</Link>
+            </Button>
           </CardContent>
         </Card>
+
+        {/* Saved Searches */}
+        {savedSearches.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Saved Searches</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2">
+                {savedSearches.map((s) => {
+                  const params = new URLSearchParams(s.filters as Record<string, string>);
+                  return (
+                    <li key={s.id}>
+                      <Link
+                        href={`/search?${params.toString()}`}
+                        className="flex items-center justify-between rounded-md border px-3 py-2 text-sm hover:bg-accent"
+                      >
+                        <span className="font-medium">{s.name}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {Object.keys(s.filters).length} filters
+                        </span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </DashboardShell>
   );
