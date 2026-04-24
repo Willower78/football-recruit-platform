@@ -322,26 +322,28 @@ export class PlayerSearchService {
     }
 
     // --- Sorting ---
-    let orderClause = 'pp.updated_at DESC';
+    // The outer query wraps the DISTINCT ON subquery, so ORDER BY must
+    // reference the aliased column names (camelCase) from the inner SELECT.
+    let orderClause = '"createdAt" DESC';
     const sortDir = dto.sortOrder === 'asc' ? 'ASC' : 'DESC';
     switch (dto.sortBy) {
       case 'name':
-        orderClause = `pp.full_name ${sortDir} NULLS LAST`;
+        orderClause = `"fullName" ${sortDir} NULLS LAST`;
         break;
       case 'age':
-        orderClause = `pp.date_of_birth ${sortDir === 'ASC' ? 'DESC' : 'ASC'} NULLS LAST`;
+        orderClause = `"dateOfBirth" ${sortDir === 'ASC' ? 'DESC' : 'ASC'} NULLS LAST`;
         break;
       case 'position':
-        orderClause = `pp.primary_position ${sortDir} NULLS LAST`;
+        orderClause = `"primaryPosition" ${sortDir} NULLS LAST`;
         break;
       case 'created_at':
-        orderClause = `pp.created_at ${sortDir}`;
+        orderClause = `"createdAt" ${sortDir}`;
         break;
       case 'overall_scouting_score':
-        orderClause = `srep.avg_overall_score ${sortDir} NULLS LAST`;
+        orderClause = `"overallScoutingScore" ${sortDir} NULLS LAST`;
         break;
       case 'readiness_score':
-        orderClause = `ps_readiness.normalized_score ${sortDir} NULLS LAST`;
+        orderClause = `"readinessScore" ${sortDir} NULLS LAST`;
         break;
     }
 
@@ -361,10 +363,7 @@ export class PlayerSearchService {
     const total = parseInt(countResult[0]?.total ?? '0', 10);
 
     // Wrap with ordering and pagination
-    const finalQuery = `SELECT * FROM (${dataQuery}) sub ORDER BY ${orderClause
-      .replace(/pp\./g, 'sub.')
-      .replace(/srep\./g, 'sub.')
-      .replace(/ps_readiness\./g, 'sub.')} LIMIT ${nextParam(limit)} OFFSET ${nextParam(offset)}`;
+    const finalQuery = `SELECT * FROM (${dataQuery}) sub ORDER BY ${orderClause} LIMIT ${nextParam(limit)} OFFSET ${nextParam(offset)}`;
     const rows = await this.dataSource.query(finalQuery, params);
 
     const items: SearchResultItem[] = rows.map((row: Record<string, unknown>) => this.mapRow(row));
