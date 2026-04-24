@@ -28,6 +28,11 @@ function navItemsFor(role: AuthUser['role']): NavItem[] {
     case 'admin':
       return [
         { href: '/dashboard/admin', label: 'Overview' },
+        { href: '/admin/users', label: 'Users' },
+        { href: '/admin/verification', label: 'Verification' },
+        { href: '/admin/reports', label: 'Reports' },
+        { href: '/admin/audit-logs', label: 'Audit Logs' },
+        { href: '/admin/analytics', label: 'Analytics' },
         { href: '/search', label: 'Search' },
       ];
     default:
