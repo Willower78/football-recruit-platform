@@ -30,10 +30,7 @@ export class ClubProfilesService {
     await this.findForUser(userId); // ensure exists
     const { latitude, longitude, ...rest } = dto;
 
-    await this.repo.update(
-      { userId },
-      rest as unknown as QueryDeepPartialEntity<ClubProfile>,
-    );
+    await this.repo.update({ userId }, rest as unknown as QueryDeepPartialEntity<ClubProfile>);
 
     if (latitude !== undefined && longitude !== undefined) {
       await this.repo.query(
@@ -50,7 +47,8 @@ export class ClubProfilesService {
     const qb = this.repo.createQueryBuilder('c');
 
     if (dto.country) qb.andWhere('c.country ILIKE :country', { country: `%${dto.country}%` });
-    if (dto.competitionLevel) qb.andWhere('c.competition_level = :cl', { cl: dto.competitionLevel });
+    if (dto.competitionLevel)
+      qb.andWhere('c.competition_level = :cl', { cl: dto.competitionLevel });
     if (dto.verified !== undefined) qb.andWhere('c.verified = :v', { v: dto.verified });
     if (dto.ageGroup) qb.andWhere(`c.age_groups @> to_jsonb(:ag::text)`, { ag: dto.ageGroup });
 

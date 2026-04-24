@@ -32,7 +32,13 @@ export class ClubProfile {
   @Column({ type: 'varchar', length: 120, nullable: true })
   city!: string | null;
 
-  @Column({ name: 'geo_point', type: 'geography', spatialFeatureType: 'Point', srid: 4326, nullable: true })
+  @Column({
+    name: 'geo_point',
+    type: 'geography',
+    spatialFeatureType: 'Point',
+    srid: 4326,
+    nullable: true,
+  })
   geoPoint!: unknown | null;
 
   @Column({ name: 'league_name', type: 'varchar', length: 160, nullable: true })
