@@ -120,6 +120,32 @@ services:
       - frontend_node_modules:/app/node_modules
       - frontend_next:/app/.next
 
+  ai-worker:
+    build: ./ai-workers
+    container_name: frp-ai-worker
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-frp}:${POSTGRES_PASSWORD:-frp_password}@postgres:5432/${POSTGRES_DB:-football_recruit}
+      REDIS_URL: redis://redis:6379
+      S3_ENDPOINT: http://minio:9000
+      S3_ACCESS_KEY: ${MINIO_ROOT_USER:-minioadmin}
+      S3_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      S3_BUCKET: ${MINIO_BUCKET:-frp-media}
+      AI_WORKER_CONCURRENCY: ${AI_WORKER_CONCURRENCY:-2}
+      VIDEO_MAX_DURATION_SEC: ${VIDEO_MAX_DURATION_SEC:-7200}
+      HIGHLIGHT_CLIP_BEFORE_SEC: ${HIGHLIGHT_CLIP_BEFORE_SEC:-5}
+      HIGHLIGHT_CLIP_AFTER_SEC: ${HIGHLIGHT_CLIP_AFTER_SEC:-3}
+      HIGHLIGHT_MIN_CONFIDENCE: ${HIGHLIGHT_MIN_CONFIDENCE:-0.7}
+    volumes:
+      - ./ai-workers:/app
+
 volumes:
   pgdata:
   redisdata:

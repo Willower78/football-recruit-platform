@@ -18,6 +18,7 @@ function navItemsFor(role: AuthUser['role']): NavItem[] {
     case 'player':
       return [
         { href: '/dashboard/player', label: 'Overview' },
+        { href: '/dashboard/player/videos', label: 'Videos & Analysis' },
         { href: '/search', label: 'Discover clubs' },
       ];
     case 'club':
