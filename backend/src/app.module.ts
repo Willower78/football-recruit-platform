@@ -14,6 +14,9 @@ import { PlayerProfilesModule } from './player-profiles/player-profiles.module';
 import { ClubProfilesModule } from './club-profiles/club-profiles.module';
 import { AuditModule } from './audit/audit.module';
 import { ConsentModule } from './consent/consent.module';
+import { PsychAssessmentModule } from './psych-assessment/psych-assessment.module';
+import { RecommendationsModule } from './recommendations/recommendations.module';
+import { EmailModule } from './email/email.module';
 import { HealthController } from './health/health.controller';
 import { AuditInterceptor } from './audit/audit.interceptor';
 
@@ -34,6 +37,9 @@ import { AuditInterceptor } from './audit/audit.interceptor';
     ClubProfilesModule,
     AuditModule,
     ConsentModule,
+    PsychAssessmentModule,
+    RecommendationsModule,
+    EmailModule,
   ],
   controllers: [HealthController],
   providers: [

@@ -43,7 +43,13 @@ export class PlayerProfile {
 
   // Stored as PostGIS geography(Point, 4326). TypeORM treats it as a raw string
   // on the TS side; helpers convert lat/lng pairs on read/write.
-  @Column({ name: 'geo_point', type: 'geography', spatialFeatureType: 'Point', srid: 4326, nullable: true })
+  @Column({
+    name: 'geo_point',
+    type: 'geography',
+    spatialFeatureType: 'Point',
+    srid: 4326,
+    nullable: true,
+  })
   geoPoint!: unknown | null;
 
   @Index()

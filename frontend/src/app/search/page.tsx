@@ -36,7 +36,15 @@ export default function SearchPage() {
   const [mode, setMode] = useState<Mode>('players');
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<(PlayerItem | ClubItem)[]>([]);
-  const [filters, setFilters] = useState({ q: '', position: '', country: '' });
+  const [filters, setFilters] = useState({
+    q: '',
+    position: '',
+    country: '',
+    hasRecommendations: false,
+    hasVerifiedRecommendations: false,
+    minCoachRating: '',
+    minRecommendations: '',
+  });
 
   async function run(e?: FormEvent<HTMLFormElement>) {
     e?.preventDefault();
@@ -45,6 +53,10 @@ export default function SearchPage() {
       const params = new URLSearchParams();
       if (filters.country) params.set('country', filters.country);
       if (mode === 'players' && filters.position) params.set('position', filters.position);
+      if (mode === 'players' && filters.hasRecommendations) params.set('hasRecommendations', 'true');
+      if (mode === 'players' && filters.hasVerifiedRecommendations) params.set('hasVerifiedRecommendations', 'true');
+      if (mode === 'players' && filters.minCoachRating) params.set('minCoachRating', filters.minCoachRating);
+      if (mode === 'players' && filters.minRecommendations) params.set('minRecommendations', filters.minRecommendations);
 
       const path = mode === 'players' ? `/players?${params}` : `/clubs?${params}`;
       const res = await api<{ items: (PlayerItem | ClubItem)[] }>(path, { skipAuth: true });
@@ -103,6 +115,51 @@ export default function SearchPage() {
                     onChange={(e) => setFilters((f) => ({ ...f, country: e.target.value }))}
                   />
                 </div>
+
+                {mode === 'players' && (
+                  <>
+                    <label className="flex items-center gap-2 text-sm cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={filters.hasRecommendations}
+                        onChange={(e) => setFilters((f) => ({ ...f, hasRecommendations: e.target.checked }))}
+                        className="h-4 w-4 rounded"
+                      />
+                      Has recommendations
+                    </label>
+                    <label className="flex items-center gap-2 text-sm cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={filters.hasVerifiedRecommendations}
+                        onChange={(e) => setFilters((f) => ({ ...f, hasVerifiedRecommendations: e.target.checked }))}
+                        className="h-4 w-4 rounded"
+                      />
+                      Has verified recommendations
+                    </label>
+                    <div className="space-y-2">
+                      <Label>Min avg coach rating</Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="5"
+                        step="0.5"
+                        value={filters.minCoachRating}
+                        onChange={(e) => setFilters((f) => ({ ...f, minCoachRating: e.target.value }))}
+                        placeholder="1-5"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Min # of recommendations</Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        value={filters.minRecommendations}
+                        onChange={(e) => setFilters((f) => ({ ...f, minRecommendations: e.target.value }))}
+                        placeholder="e.g. 2"
+                      />
+                    </div>
+                  </>
+                )}
 
                 <Button type="submit" className="w-full">Search</Button>
               </form>
