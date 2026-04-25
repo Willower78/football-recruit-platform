@@ -5,16 +5,16 @@ import { Card, CardContent } from '@/components/ui/card';
 
 const features = [
   {
-    title: 'Player profiles',
+    title: 'Athlete profiles',
     body: 'Build a rich, verifiable profile with stats, videos, coach recommendations, and a psychometric assessment.',
   },
   {
-    title: 'Club discovery',
-    body: 'Clubs post detailed needs and filter players by position, age, geography, and playing style.',
+    title: 'Club & tryout discovery',
+    body: 'Clubs post detailed needs, tryouts, and open spots. Athletes filter by position, age, geography, and playing style.',
   },
   {
     title: 'Trust and verification',
-    body: 'Official-website and tiered verification reduce noise so every match feels credible.',
+    body: 'Official-website and tiered verification reduce noise so every connection feels credible.',
   },
 ];
 
@@ -24,15 +24,16 @@ export default function LandingPage() {
       <SiteHeader />
       <main>
         <section className="container flex flex-col items-center gap-6 py-20 text-center md:py-28">
-          <span className="rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground">
-            For players, clubs, and scouts
+          <img src="/logo.png" alt="Apex Draft" className="h-24 w-auto md:h-32" />
+          <span className="rounded-full border border-secondary bg-secondary/10 px-4 py-1.5 text-sm font-semibold text-secondary">
+            Talent is everywhere, opportunity is not
           </span>
           <h1 className="max-w-3xl text-4xl font-semibold leading-tight tracking-tight md:text-6xl">
-            Connecting football talent with the clubs looking for them.
+            Where amateur athletes find their next opportunity.
           </h1>
           <p className="max-w-2xl text-lg text-muted-foreground md:text-xl">
-            A modern, verifiable recruitment platform that goes beyond highlight reels —
-            psychometrics, coach recommendations, and AI-assisted scouting.
+            The world&apos;s platform for amateur athletes — discover tryouts, connect with clubs
+            and scouts, and take the next step in your career with AI-assisted scouting.
           </p>
           <div className="mt-4 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">

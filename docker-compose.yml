@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Football Recruit Platform — local development stack
+# Apex Draft — local development stack
 # ---------------------------------------------------------------------------
 # Services:
 #   postgres  — Postgres 16 with PostGIS + pg_trgm extensions
@@ -111,7 +111,7 @@ services:
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
-      NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-Football Recruit Platform}
+      NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-Apex Draft}
     ports:
       - "3000:3000"
     volumes:

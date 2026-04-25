@@ -1,4 +1,4 @@
-# Getting Started
+# Getting Started — Apex Draft
 
 ## Prerequisites
 - Docker and Docker Compose installed ([Install Docker](https://docs.docker.com/get-docker/))

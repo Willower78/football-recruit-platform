@@ -19,8 +19,8 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur">
       <div className="container flex h-14 items-center justify-between">
         <Link href="/" className="flex items-center gap-2 font-semibold">
-          <span className="inline-block h-6 w-6 rounded-sm bg-primary" aria-hidden />
-          <span>Football Recruit</span>
+          <img src="/logo.png" alt="Apex Draft" className="h-8 w-auto" />
+          <span>Apex Draft</span>
         </Link>
 
         <nav className="flex items-center gap-4 text-sm">

@@ -1,8 +1,10 @@
-# Football Recruit Platform
+# Apex Draft
 
-A modern recruitment platform that connects football talent with clubs and
-scouts. Goes beyond highlight reels with psychometric assessments, coach
-recommendations, and AI-assisted scouting.
+> *Talent is everywhere, opportunity is not.*
+
+The world's platform for amateur athletes. Connects talent with clubs, scouts,
+and tryouts — powered by psychometric assessments, coach recommendations,
+and AI-assisted scouting.
 
 > **Status:** Step 1 (project scaffold + database) and Step 2 (auth +
 > profiles) are implemented. Steps 3+ (needs/applications, media uploads,

@@ -20,8 +20,8 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Football Recruit Platform API')
-    .setDescription('REST API for the Football Recruit Platform (auth, profiles, matching).')
+    .setTitle('Apex Draft API')
+    .setDescription('REST API for Apex Draft — the platform for amateur athletes (auth, profiles, matching).')
     .setVersion('0.1.0')
     .addBearerAuth()
     .build();

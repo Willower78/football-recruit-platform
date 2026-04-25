@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Football Recruit Platform',
-  description: 'Connecting football talent with clubs and scouts.',
+  title: 'Apex Draft',
+  description: 'Talent is everywhere, opportunity is not. The platform connecting amateur athletes with clubs, scouts, and tryouts.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
