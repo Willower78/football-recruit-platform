@@ -71,8 +71,8 @@ export function DashboardShell({
     <div className="flex min-h-screen">
       <aside className="hidden w-60 flex-col border-r bg-muted/30 p-4 md:flex">
         <Link href="/" className="mb-6 flex items-center gap-2 font-semibold">
-          <span className="inline-block h-5 w-5 rounded-sm bg-primary" aria-hidden />
-          Football Recruit
+          <img src="/logo.png" alt="Apex Draft" className="h-7 w-auto" />
+          Apex Draft
         </Link>
         <nav className="flex-1 space-y-1">
           {items.map((item) => (
