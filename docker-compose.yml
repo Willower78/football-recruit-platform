@@ -1,7 +1,5 @@
-version: "3.9"
-
 # ---------------------------------------------------------------------------
-# Football Recruit Platform — local development stack
+# Apex Draft — local development stack
 # ---------------------------------------------------------------------------
 # Services:
 #   postgres  — Postgres 16 with PostGIS + pg_trgm extensions
@@ -28,6 +26,7 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./database/docker-init.sh:/docker-entrypoint-initdb.d/01-init.sh:ro
       - ./database/migrations:/docker-entrypoint-initdb.d/10-migrations:ro
       - ./database/seeds:/docker-entrypoint-initdb.d/20-seeds:ro
     healthcheck:
@@ -112,7 +111,7 @@ services:
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
-      NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-Football Recruit Platform}
+      NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-Apex Draft}
     ports:
       - "3000:3000"
     volumes:

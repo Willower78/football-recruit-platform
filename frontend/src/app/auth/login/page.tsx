@@ -34,7 +34,8 @@ export default function LoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-muted/30 p-4">
       <Card className="w-full max-w-sm">
-        <CardHeader>
+        <CardHeader className="items-center space-y-3">
+          <img src="/logo.png" alt="Apex Draft" className="h-16 w-auto" />
           <CardTitle>Welcome back</CardTitle>
         </CardHeader>
         <CardContent>

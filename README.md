@@ -1,13 +1,27 @@
-# Football Recruit Platform
+# Apex Draft
 
-A modern recruitment platform that connects football talent with clubs and
-scouts. Goes beyond highlight reels with psychometric assessments, coach
-recommendations, and AI-assisted scouting.
+> *Talent is everywhere, opportunity is not.*
+
+The world's platform for amateur athletes. Connects talent with clubs, scouts,
+and tryouts — powered by psychometric assessments, coach recommendations,
+and AI-assisted scouting.
 
 > **Status:** Step 1 (project scaffold + database) and Step 2 (auth +
 > profiles) are implemented. Steps 3+ (needs/applications, media uploads,
 > psych assessment runner, AI scouting, verification workflows) arrive in
 > subsequent PRs.
+
+## Quick Start
+
+```bash
+git clone https://github.com/Willower78/football-recruit-platform.git
+cd football-recruit-platform
+cp .env.example .env
+docker-compose up --build
+```
+
+Then open http://localhost:3000 (frontend) or http://localhost:3001/api/docs (Swagger).
+See **[GETTING_STARTED.md](GETTING_STARTED.md)** for detailed setup, seed data, default accounts, and troubleshooting.
 
 ## Tech stack
 
@@ -44,28 +58,22 @@ recommendations, and AI-assisted scouting.
 
 ## Getting started
 
-1. Copy the example env file and tweak as needed:
+See **[GETTING_STARTED.md](GETTING_STARTED.md)** for the full walkthrough. The short version:
 
-   ```bash
-   cp .env.example .env
-   ```
+```bash
+cp .env.example .env
+docker-compose up --build
+```
 
-2. Boot the full stack:
+On first run `database/docker-init.sh` applies every SQL file in
+`database/migrations/` then `database/seeds/` (100 psych questions + admin user).
 
-   ```bash
-   docker-compose up --build
-   ```
+Services:
 
-   On first run Postgres auto-applies every SQL file in `database/migrations/`
-   and then `database/seeds/` (including 100 psych-assessment questions and a
-   default admin user).
-
-3. Open:
-
-   - Frontend:     http://localhost:3000
-   - Backend API:  http://localhost:3001
-   - Swagger UI:   http://localhost:3001/api/docs
-   - MinIO console:http://localhost:9001  (login: `minioadmin` / `minioadmin`)
+- **Frontend:** http://localhost:3000
+- **Backend API:** http://localhost:3001
+- **Swagger UI:** http://localhost:3001/api/docs
+- **MinIO console:** http://localhost:9001 (login: `minioadmin` / `minioadmin`)
 
 ## Default accounts
 
@@ -94,7 +102,9 @@ football-recruit-platform/
 │       ├── audit/            # AuditService + global AuditInterceptor
 │       ├── health/           # GET /health
 │       └── entities/         # TypeORM entity definitions
+├── GETTING_STARTED.md           # Detailed setup & troubleshooting guide
 ├── database/
+│   ├── docker-init.sh        # Entrypoint script that runs migrations + seeds
 │   ├── migrations/           # 26 numbered SQL files (tables + indexes)
 │   └── seeds/                # psych questions + admin user
 └── ai-workers/               # Python placeholder (torch/opencv land later)
@@ -102,9 +112,9 @@ football-recruit-platform/
 
 ## Database
 
-Migrations are plain numbered SQL files in `database/migrations/`. The
-Docker Postgres image applies them automatically on a fresh volume; to re-run
-from scratch, drop the `pgdata` volume.
+Migrations are plain numbered SQL files in `database/migrations/`. On a fresh
+volume, `database/docker-init.sh` runs them in order via the Postgres
+entrypoint. To re-run from scratch: `docker-compose down -v && docker-compose up --build`.
 
 Key tables:
 
