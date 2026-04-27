@@ -126,7 +126,7 @@ export class TryoutsService {
 
     if (tryout.maxParticipants) {
       const count = await this.appRepo.count({
-        where: { tryoutId, status: 'applied' },
+        where: [{ tryoutId, status: 'applied' }, { tryoutId, status: 'accepted' }],
       });
       if (count >= tryout.maxParticipants) {
         throw new ConflictException('This tryout is full');
@@ -166,11 +166,24 @@ export class TryoutsService {
       throw new ForbiddenException('Only the club owner can view applications');
     }
 
-    return this.appRepo.find({
+    const apps = await this.appRepo.find({
       where: { tryoutId },
       relations: ['player'],
       order: { createdAt: 'DESC' },
     });
+
+    return apps.map((a) => ({
+      ...a,
+      player: a.player
+        ? {
+            id: a.player.id,
+            email: a.player.email,
+            role: a.player.role,
+            status: a.player.status,
+            createdAt: a.player.createdAt,
+          }
+        : null,
+    }));
   }
 
   async updateApplicationStatus(
