@@ -24,6 +24,9 @@ export function SiteHeader() {
         </Link>
 
         <nav className="flex items-center gap-4 text-sm">
+          <Link href="/tryouts" className="text-muted-foreground hover:text-foreground">
+            Tryouts
+          </Link>
           <Link href="/search" className="text-muted-foreground hover:text-foreground">
             Search
           </Link>

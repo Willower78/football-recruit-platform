@@ -49,6 +49,7 @@ export default function ClubDashboard() {
             <CardTitle>Quick actions</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-3">
+            <Button asChild variant="outline"><Link href="/dashboard/club/tryouts">Manage tryouts</Link></Button>
             <Button asChild variant="outline"><Link href="/search">Discover players</Link></Button>
             <Button asChild variant="outline"><Link href="/onboarding/club">Update profile</Link></Button>
           </CardContent>

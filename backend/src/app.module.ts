@@ -14,6 +14,7 @@ import { PlayerProfilesModule } from './player-profiles/player-profiles.module';
 import { ClubProfilesModule } from './club-profiles/club-profiles.module';
 import { AuditModule } from './audit/audit.module';
 import { ConsentModule } from './consent/consent.module';
+import { TryoutsModule } from './tryouts/tryouts.module';
 import { HealthController } from './health/health.controller';
 import { AuditInterceptor } from './audit/audit.interceptor';
 
@@ -34,6 +35,7 @@ import { AuditInterceptor } from './audit/audit.interceptor';
     ClubProfilesModule,
     AuditModule,
     ConsentModule,
+    TryoutsModule,
   ],
   controllers: [HealthController],
   providers: [
