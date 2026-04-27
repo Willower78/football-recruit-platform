@@ -79,6 +79,8 @@ export default function PlayerDashboard() {
             <CardTitle>Quick actions</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-3">
+            <Button asChild variant="outline"><Link href="/tryouts">Discover tryouts</Link></Button>
+            <Button asChild variant="outline"><Link href="/dashboard/player/applications">My applications</Link></Button>
             <Button asChild variant="outline"><Link href="/search">Discover clubs</Link></Button>
             <Button asChild variant="outline"><Link href="/onboarding/player">Update profile</Link></Button>
           </CardContent>

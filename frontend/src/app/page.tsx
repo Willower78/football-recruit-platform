@@ -13,6 +13,10 @@ const features = [
     body: 'Clubs post detailed needs and filter players by position, age, geography, and playing style.',
   },
   {
+    title: 'Tryout discovery',
+    body: 'Browse open tryouts posted by clubs, filter by position, location, and age group, and apply in one click.',
+  },
+  {
     title: 'Trust and verification',
     body: 'Official-website and tiered verification reduce noise so every match feels credible.',
   },
@@ -44,7 +48,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="container grid gap-6 pb-24 md:grid-cols-3">
+        <section className="container grid gap-6 pb-24 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((f) => (
             <Card key={f.title}>
               <CardContent className="space-y-2 p-6">
