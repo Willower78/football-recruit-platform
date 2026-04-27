@@ -32,7 +32,7 @@ export class PostsService {
     const qb = this.postRepo
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.author', 'author')
-      .orderBy('p.created_at', 'DESC')
+      .orderBy('p.createdAt', 'DESC')
       .skip((page - 1) * limit)
       .take(limit);
 
