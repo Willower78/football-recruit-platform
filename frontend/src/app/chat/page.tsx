@@ -34,6 +34,7 @@ export default function ChatPage() {
   const [loading, setLoading] = useState(true);
   const socketRef = useRef<Socket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const selectedUserRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -45,7 +46,13 @@ export default function ChatPage() {
     socketRef.current = socket;
 
     socket.on('new_message', (msg: ChatMessage) => {
-      setMessages((prev) => [...prev, msg]);
+      const selected = selectedUserRef.current;
+      if (!selected) return;
+      const belongsToConversation =
+        msg.senderId === selected || msg.recipientId === selected;
+      if (belongsToConversation) {
+        setMessages((prev) => [...prev, msg]);
+      }
     });
 
     return () => {
@@ -75,6 +82,7 @@ export default function ChatPage() {
 
   async function selectConversation(userId: string) {
     setSelectedUser(userId);
+    selectedUserRef.current = userId;
     try {
       const res = await api<{ items: ChatMessage[] }>(`/chat/messages/${userId}`);
       setMessages(res.items ?? []);

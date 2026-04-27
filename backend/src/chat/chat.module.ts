@@ -14,7 +14,7 @@ import { Message } from '../entities/message.entity';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        secret: config.get<string>('JWT_SECRET', 'super-secret-dev-key'),
+        secret: config.get<string>('JWT_ACCESS_SECRET', 'dev_access_secret_change_me'),
       }),
     }),
   ],
