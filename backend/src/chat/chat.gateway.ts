@@ -85,11 +85,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // Deliver to sender
     client.emit('new_message', payload);
 
-    // Deliver to recipient
+    // Deliver to recipient (skip sender's socket to avoid duplicates)
     const recipientSockets = this.userSockets.get(body.recipientId);
     if (recipientSockets) {
       for (const socketId of recipientSockets) {
-        this.server.to(socketId).emit('new_message', payload);
+        if (socketId !== client.id) {
+          this.server.to(socketId).emit('new_message', payload);
+        }
       }
     }
   }

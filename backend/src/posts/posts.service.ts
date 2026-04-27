@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Post } from '../entities/post.entity';
 import { PostLike } from '../entities/post-like.entity';
 import { PostComment } from '../entities/post-comment.entity';
@@ -15,6 +15,7 @@ export class PostsService {
     @InjectRepository(PostLike) private readonly likeRepo: Repository<PostLike>,
     @InjectRepository(PostComment) private readonly commentRepo: Repository<PostComment>,
     @InjectRepository(Follow) private readonly followRepo: Repository<Follow>,
+    private readonly dataSource: DataSource,
   ) {}
 
   async createPost(authorId: string, dto: CreatePostDto): Promise<Post> {
@@ -85,16 +86,31 @@ export class PostsService {
     const post = await this.postRepo.findOne({ where: { id: postId } });
     if (!post) throw new NotFoundException('Post not found');
 
-    const existing = await this.likeRepo.findOne({ where: { postId, userId } });
-    if (existing) {
-      await this.likeRepo.remove(existing);
-      await this.postRepo.decrement({ id: postId }, 'likesCount', 1);
-      return { liked: false };
-    } else {
-      await this.likeRepo.save(this.likeRepo.create({ postId, userId }));
-      await this.postRepo.increment({ id: postId }, 'likesCount', 1);
-      return { liked: true };
-    }
+    return this.dataSource.transaction(async (manager) => {
+      const likeRepo = manager.getRepository(PostLike);
+      const postRepo = manager.getRepository(Post);
+
+      const existing = await likeRepo.findOne({ where: { postId, userId } });
+      if (existing) {
+        const result = await likeRepo.delete({ postId, userId });
+        if (result.affected && result.affected > 0) {
+          await postRepo.decrement({ id: postId }, 'likesCount', 1);
+        }
+        return { liked: false };
+      } else {
+        try {
+          await likeRepo.insert({ postId, userId });
+          await postRepo.increment({ id: postId }, 'likesCount', 1);
+        } catch (err: unknown) {
+          const dbErr = err as { code?: string };
+          if (dbErr.code === '23505') {
+            return { liked: true };
+          }
+          throw err;
+        }
+        return { liked: true };
+      }
+    });
   }
 
   async addComment(postId: string, authorId: string, dto: CreateCommentDto) {
