@@ -24,6 +24,12 @@ export function SiteHeader() {
         </Link>
 
         <nav className="flex items-center gap-4 text-sm">
+          <Link href="/feed" className="text-muted-foreground hover:text-foreground">
+            Feed
+          </Link>
+          <Link href="/chat" className="text-muted-foreground hover:text-foreground">
+            Chat
+          </Link>
           <Link href="/search" className="text-muted-foreground hover:text-foreground">
             Search
           </Link>

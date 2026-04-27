@@ -15,6 +15,9 @@ import { ClubProfilesModule } from './club-profiles/club-profiles.module';
 import { AuditModule } from './audit/audit.module';
 import { ConsentModule } from './consent/consent.module';
 import { AnalyticsModule } from './analytics/analytics.module';
+import { PostsModule } from './posts/posts.module';
+import { MediaModule } from './media/media.module';
+import { ChatModule } from './chat/chat.module';
 import { HealthController } from './health/health.controller';
 import { AuditInterceptor } from './audit/audit.interceptor';
 
@@ -36,6 +39,9 @@ import { AuditInterceptor } from './audit/audit.interceptor';
     AuditModule,
     ConsentModule,
     AnalyticsModule,
+    PostsModule,
+    MediaModule,
+    ChatModule,
   ],
   controllers: [HealthController],
   providers: [

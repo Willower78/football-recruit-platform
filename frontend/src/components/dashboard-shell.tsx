@@ -18,16 +18,19 @@ function navItemsFor(role: AuthUser['role']): NavItem[] {
     case 'player':
       return [
         { href: '/dashboard/player', label: 'Overview' },
+        { href: '/feed', label: 'Feed' },
         { href: '/search', label: 'Discover clubs' },
       ];
     case 'club':
       return [
         { href: '/dashboard/club', label: 'Overview' },
+        { href: '/feed', label: 'Feed' },
         { href: '/search', label: 'Discover players' },
       ];
     case 'admin':
       return [
         { href: '/dashboard/admin', label: 'Overview' },
+        { href: '/feed', label: 'Feed' },
         { href: '/search', label: 'Search' },
       ];
     default:
